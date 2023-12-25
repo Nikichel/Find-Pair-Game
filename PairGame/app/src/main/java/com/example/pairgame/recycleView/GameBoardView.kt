@@ -1,6 +1,8 @@
 package com.example.pairgame.recycleView
 
 
+import android.graphics.Color
+import android.graphics.Color.LTGRAY
 import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
@@ -39,15 +41,25 @@ class GameBoardView (
                 binding.imageView.visibility = View.VISIBLE
             else
                 binding.imageView.visibility = View.GONE
+
+            if(!card.isSelected)
+                binding.imageView.setBackgroundColor(Color.TRANSPARENT)
             itemView.setOnClickListener {
+                card.isSelected = true
+                binding.imageView.setBackgroundColor(Color.LTGRAY)
                 selectedPosition.add(adapterPosition)
                 if(selectedPosition.size == 2){
                     if(gameCards[selectedPosition[0]] == gameCards[selectedPosition[1]]
                         && selectedPosition[0]!=selectedPosition[1]){
                         gameCards[selectedPosition[0]].isOpen = false
                         gameCards[selectedPosition[1]].isOpen = false
-                        notifyDataSetChanged()
                     }
+                    else{
+                        gameCards[selectedPosition[0]].isSelected = false
+                        gameCards[selectedPosition[1]].isSelected = false
+                    }
+                    notifyItemChanged(selectedPosition[0], null)
+                    notifyItemChanged(selectedPosition[1], null)
                     selectedPosition.clear()
                 }
             }

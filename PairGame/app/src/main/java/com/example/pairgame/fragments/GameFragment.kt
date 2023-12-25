@@ -41,15 +41,26 @@ class GameFragment : Fragment() {
                 .replace(R.id.fragmentHolder, MenuFragment.newInstance())
                 .commit()
         }
-
-        for(i in 0..19){
+        val pairGameCard = arrayListOf<GameCard>()
+        for(i in 0..9){
             lateinit var gameCard: GameCard
-
             when(Random.nextInt(1,4)){
-                1 -> gameCard= GameCard(R.drawable.gamecard1)
-                2 -> gameCard= GameCard(R.drawable.gamecard2)
-                3 -> gameCard= GameCard(R.drawable.gamecard3)
+                1 -> {
+                    gameCard= GameCard(R.drawable.gamecard1)
+                }
+                2 -> {
+                    gameCard = GameCard(R.drawable.gamecard2)
+                }
+                3 -> {
+                    gameCard= GameCard(R.drawable.gamecard3)
+                }
             }
+
+            pairGameCard.add(gameCard)
+            adapter.addItem(gameCard)
+        }
+
+        for(gameCard in pairGameCard.shuffled()){
             adapter.addItem(gameCard)
         }
 
