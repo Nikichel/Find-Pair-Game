@@ -14,6 +14,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportFragmentManager.beginTransaction().replace(binding.fragmentHolder.id, MenuFragment()).commit()
+        supportFragmentManager.beginTransaction().replace(binding.fragmentHolder.id, MenuFragment.newInstance("0")).commit()
     }
 }

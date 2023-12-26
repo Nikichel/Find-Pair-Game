@@ -4,6 +4,7 @@ package com.example.pairgame.recycleView
 import android.graphics.Color
 import android.graphics.Color.LTGRAY
 import android.opengl.Visibility
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,11 @@ import com.example.pairgame.R
 import com.example.pairgame.databinding.GameCardItemBinding
 
 
-class GameBoardView (
+class GameBoardView (private val listener : Listener
     //private val onCardClicked: (GameCard) -> Unit
     ) : RecyclerView.Adapter<GameBoardView.ViewHolder>() {
 
+    private var findPair = 0
     private val gameCards = arrayListOf<GameCard>()
     private val selectedPosition = arrayListOf<Int>()
 
@@ -40,35 +42,53 @@ class GameBoardView (
             if(card.isOpen)
                 binding.imageView.visibility = View.VISIBLE
             else
-                binding.imageView.visibility = View.GONE
+                binding.imageView.visibility = View.INVISIBLE
 
             if(!card.isSelected)
                 binding.imageView.setBackgroundColor(Color.TRANSPARENT)
-            itemView.setOnClickListener {
-                card.isSelected = true
-                binding.imageView.setBackgroundColor(Color.LTGRAY)
-                selectedPosition.add(adapterPosition)
-                if(selectedPosition.size == 2){
-                    if(gameCards[selectedPosition[0]] == gameCards[selectedPosition[1]]
-                        && selectedPosition[0]!=selectedPosition[1]){
-                        gameCards[selectedPosition[0]].isOpen = false
-                        gameCards[selectedPosition[1]].isOpen = false
+            itemView.setOnClickListener {onCardClicked(card)}
+        }
+        private fun onCardClicked(card: GameCard){
+            card.isSelected = true
+            Thread.sleep(100)
+            binding.imageView.setBackgroundColor(Color.LTGRAY)
+            selectedPosition.add(adapterPosition)
+            if(selectedPosition.size == 2){
+                val fisrtPosition = selectedPosition[0]
+                val secondPosition = selectedPosition[1]
+                if(fisrtPosition != secondPosition){
+                    if(gameCards[fisrtPosition] == gameCards[secondPosition])
+                    {
+                        gameCards[fisrtPosition].isOpen = false
+                        gameCards[secondPosition].isOpen = false
+                        findPair++
                     }
-                    else{
-                        gameCards[selectedPosition[0]].isSelected = false
-                        gameCards[selectedPosition[1]].isSelected = false
+                    else
+                    {
+                        gameCards[fisrtPosition].isSelected = false
+                        gameCards[secondPosition].isSelected = false
                     }
-                    notifyItemChanged(selectedPosition[0], null)
-                    notifyItemChanged(selectedPosition[1], null)
-                    selectedPosition.clear()
-                }
-            }
 
+                    notifyItemChanged(fisrtPosition, null)
+                    notifyItemChanged(secondPosition, null)
+
+                }
+                else
+                    notifyDataSetChanged()
+
+                selectedPosition.clear()
+                Log.d("findPair", findPair.toString())
+                if(findPair==8)
+                    listener.finishGame()
+            }
         }
     }
-
     fun addItem(card: GameCard){
         gameCards.add(card)
-        notifyDataSetChanged()
+        notifyItemChanged(gameCards.size-1, null)
+    }
+
+    interface Listener{
+        fun finishGame()
     }
 }
