@@ -6,22 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.pairgame.R
-import com.example.pairgame.databinding.FragmentMenuBinding
+import com.example.pairgame.databinding.FragmentFinalGameBinding
 
-var currentCoins = 100
-class MenuFragment : Fragment() {
+class FinalGameFragment : Fragment() {
 
+    private lateinit var binding: FragmentFinalGameBinding
     private lateinit var myData: String
-    private lateinit var binding: FragmentMenuBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        binding = FragmentMenuBinding.inflate(inflater)
-        return binding.root
-    }
-
+    private var addCoins = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -30,23 +21,38 @@ class MenuFragment : Fragment() {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        binding = FragmentFinalGameBinding.inflate(inflater)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.bStart.setOnClickListener {
+        binding.bMainMenu.setOnClickListener{
             requireActivity().supportFragmentManager.
             beginTransaction().
-            replace(R.id.fragmentHolder, GameFragment.newInstance()).
+            replace(R.id.fragmentHolder, MenuFragment.newInstance(addCoins.toString())).
             commit()
         }
 
-        currentCoins += myData.toInt()
-        binding.countCoins.text = currentCoins.toString()
+        val time = myData.toInt()
+        addCoins = when {
+            time <= 20 -> 100
+            time in 21..35 -> (100 - 5 * (time - 20))
+            else -> 20
+        }
+
+        binding.countCoins.text = addCoins.toString()
     }
 
     companion object {
         private const val ARG_DATA = "data"
+
         @JvmStatic
-        fun newInstance(data: String): MenuFragment{
-            val fragment = MenuFragment()
+        fun newInstance(data: String): FinalGameFragment{
+            val fragment = FinalGameFragment()
             val args = Bundle()
             args.putString(ARG_DATA, data)
             fragment.arguments = args

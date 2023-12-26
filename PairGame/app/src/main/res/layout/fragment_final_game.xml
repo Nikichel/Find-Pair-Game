@@ -4,18 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.MenuFragment">
+    tools:context=".fragments.FinalGameFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center|center_horizontal"
+        android:layout_marginTop="8dp"
+        android:gravity="center_horizontal|center_vertical"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="142dp"
+        <TextView
+            android:id="@+id/congratulation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:gravity="center|center_horizontal|center_vertical"
+            android:text="CONGRATULATION!"
+            android:textSize="34sp" />
+
+        <LinearLayout
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -29,7 +38,7 @@
                 android:textSize="20sp" />
 
             <ImageView
-                android:id="@+id/coinImage"
+                android:id="@+id/coinImg"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_weight="1"
@@ -37,20 +46,12 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/logo" />
-
         <Button
-            android:id="@+id/bStart"
+            android:id="@+id/bMainMenu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Start Game"
+            android:layout_margin="12dp"
+            android:text="Main menu"
             android:textSize="24sp" />
     </LinearLayout>
 </FrameLayout>
